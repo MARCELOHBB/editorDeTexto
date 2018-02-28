@@ -22,23 +22,22 @@ namespace EditorDeTexto
         {
             if (File.Exists("entrada.txt"))
             {
-                Stream entrada = File.Open("entrada.txt", FileMode.Open);
-                StreamReader leitor = new StreamReader(entrada);
-                string conteudo = leitor.ReadToEnd();
-                texto.Text = conteudo;
-
-                leitor.Close();
-                entrada.Close();
+                using (Stream entrada = File.Open("entrada.txt", FileMode.Open))
+                using (StreamReader leitor = new StreamReader(entrada))
+                {
+                    string conteudo = leitor.ReadToEnd();
+                    texto.Text = conteudo;
+                }
             }
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Stream saida = File.Open("entrada.txt", FileMode.Create);
-            StreamWriter escritor = new StreamWriter(saida);
-            escritor.WriteLine(texto.Text);
-            escritor.Close();
-            saida.Close();
+            using (Stream saida = File.OpenWrite("entrada.txt"))
+            using (StreamWriter escritor = new StreamWriter(saida))
+            {
+                escritor.Write(texto.Text);
+            }
         }
     }
 }
